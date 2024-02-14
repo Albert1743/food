@@ -16,6 +16,81 @@ open_close_modal(close_buttons, false)
 
 
 
+
+// Стиль питания 
+document.addEventListener('DOMContentLoaded', function () {
+
+    const items = document.querySelectorAll('.tabheader__item');
+    const tabContent = document.querySelectorAll('.tabcontent');
+
+    function showTab(tabIndex) {
+        tabContent.forEach((content, index) => {
+            if (index === tabIndex) {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+    }
+    showTab(0);
+
+    items.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            
+            showTab(index)
+           
+            items.forEach(item => {
+                item.classList.remove('tabheader__item_active');
+            });
+            item.classList.add('tabheader__item_active');
+        })
+    })
+})
+
+
+
+// Carusel
+const slides = document.querySelectorAll('.offer__slide')
+const prev_next_btns = document.querySelectorAll("[data-group]")
+let slideIndex = 0
+
+
+showSlides(slideIndex)
+function showSlides(n) {
+
+    if (n >= slides.length - 1) {
+        slideIndex = 0
+    }
+
+    if (n < 0) {
+        slideIndex = slides.length - 1
+    }
+
+
+    slides.forEach(slide => slide.classList.add('hide'))
+    slides[slideIndex].classList.remove('hide')
+
+}
+
+
+prev_next_btns.forEach(btn => {
+    btn.onclick = () => {
+        const act = btn.getAttribute('data-group')
+
+        if (act === "prev") {
+            slideIndex--
+            showSlides(slideIndex)
+        } else {
+            slideIndex++
+            showSlides(slideIndex)
+        }
+
+    }
+})
+
+
+
+// Sale
 const minutes = document.querySelector('#minutes')
 const seconds = document.querySelector('#seconds')
 
@@ -32,45 +107,3 @@ setInterval(() => {
     }
 
 }, 1000)
-
-
-
-
-
-
-
-const slides = document.querySelectorAll('.offer__slide');
-let slideIndex = 0;
-let current = document.querySelector('#current')
-let total = document.querySelector('#total')
-const prev_btn = document.querySelector('.offer__slider-prev');
-const next_btn = document.querySelector('.offer__slider-next');
-
-
-slides.forEach(slide => slide.classList.add('hide', 'fade'));
-slides[slideIndex].classList.remove('hide');
-
-
-function slidesshow(i) {
-    slides.forEach(slide => {
-        slide.classList.add('hide', 'fade')
-    })
-    
-    slideIndex = (slides.length + slideIndex + i) % slides.length;
-
-    slides[slideIndex].classList.remove('hide');
-}
-
-prev_btn.onclick = () => {
-    slidesshow(-1);
-    current.innerText = "0" + slideIndex
-
-}
-
-next_btn.onclick = () => {
-    slidesshow(1);
-    current.innerText = "0" + slideIndex
-}
-
-
-
