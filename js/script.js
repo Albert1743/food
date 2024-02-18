@@ -18,47 +18,74 @@ open_close_modal(close_buttons, false)
 
 
 // Стиль питания 
-document.addEventListener('DOMContentLoaded', function () {
+// document.addEventListener('DOMContentLoaded', function () {
 
-    const items = document.querySelectorAll('.tabheader__item');
-    const tabContent = document.querySelectorAll('.tabcontent');
+//     const items = document.querySelectorAll('.tabheader__item');
+//     const tabContent = document.querySelectorAll('.tabcontent');
 
-    function showTab(tabIndex) {
-        tabContent.forEach((content, index) => {
-            if (index === tabIndex) {
-                content.style.display = 'block';
-            } else {
-                content.style.display = 'none';
-            }
-        });
+//     function showTab(tabIndex) {
+//         tabContent.forEach((content, index) => {
+//             if (index === tabIndex) {
+//                 content.style.display = 'block';
+//             } else {
+//                 content.style.display = 'none';
+//             }
+//         });
+//     }
+//     showTab(0);
+
+//     items.forEach((item, index) => {
+//         item.addEventListener('click', () => {
+
+//             showTab(index)
+
+//             items.forEach(item => {
+//                 item.classList.remove('tabheader__item_active');
+//             });
+//             item.classList.add('tabheader__item_active');
+//         })
+//     })
+// })
+
+
+const tab_btns = document.querySelectorAll('.tabheader__item')
+const tabcontent = document.querySelectorAll('.tabcontent')
+
+
+function showTabs(idx) {
+    tabcontent.forEach(slide => slide.classList.add('hide', 'fade'))
+    tabcontent[idx].classList.remove('hide')
+}
+showTabs(0)
+
+tab_btns.forEach((btn, idx) => {
+    btn.onclick = () => {
+        tab_btns.forEach(el => el.classList.remove('tabheader__item_active'))
+        btn.classList.add('tabheader__item_active')
+        showTabs(idx)
     }
-    showTab(0);
-
-    items.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            
-            showTab(index)
-           
-            items.forEach(item => {
-                item.classList.remove('tabheader__item_active');
-            });
-            item.classList.add('tabheader__item_active');
-        })
-    })
 })
+
+
 
 
 
 // Carusel
 const slides = document.querySelectorAll('.offer__slide')
-const prev_next_btns = document.querySelectorAll("[data-group]")
+const prev_btn = document.querySelector('.offer__slider-prev')
+const next_btn = document.querySelector('.offer__slider-next')
+const current = document.querySelector('#current')
+const total = document.querySelector('#total')
+
 let slideIndex = 0
+total.innerHTML = slides.length < 10 ? `0${slides.length}` : slides.length
 
 
-showSlides(slideIndex)
+showSlides()
+
 function showSlides(n) {
 
-    if (n >= slides.length - 1) {
+    if (n >= slides.length) {
         slideIndex = 0
     }
 
@@ -66,44 +93,87 @@ function showSlides(n) {
         slideIndex = slides.length - 1
     }
 
-
-    slides.forEach(slide => slide.classList.add('hide'))
+    slides.forEach(slide => slide.classList.add('hide', 'fade'))
     slides[slideIndex].classList.remove('hide')
 
+
+    current.innerHTML = slideIndex + 1 < 10 ? `0${slideIndex + 1}` : slideIndex + 1
 }
 
 
-prev_next_btns.forEach(btn => {
-    btn.onclick = () => {
-        const act = btn.getAttribute('data-group')
+next_btn.onclick = () => {
+    slideIndex++
+    showSlides(slideIndex)
+    console.log('ffff');
+}
 
-        if (act === "prev") {
-            slideIndex--
-            showSlides(slideIndex)
-        } else {
-            slideIndex++
-            showSlides(slideIndex)
+prev_btn.onclick = () => {
+    slideIndex--
+    showSlides(slideIndex)
+}
+
+
+
+
+
+
+
+// let user = {
+//     gender: 'woman'
+// }
+
+// const gender_btns = document.querySelectorAll('#gender div')
+
+
+
+
+// TIMER
+const deadline = "2024-02-19 01:00"
+
+function getRemainingTime(endTime) {
+    const t = Date.parse(endTime) - Date.parse(new Date())
+    const days = Math.floor((t / 1000) / 60 / 60 / 24)
+    const hours = Math.floor((t / 1000) / 60 / 60 % 24)
+    const minutes = Math.floor((t / 1000) / 60 % 60)
+    const seconds = Math.floor((t / 1000) % 60)
+
+    return {
+        t,
+        days,
+        hours,
+        minutes,
+        seconds
+    }
+}
+
+function setTimer(endTime, selector) {
+    const t = document.querySelector(selector)
+    const days = t.querySelector('#days')
+    const hours = t.querySelector('#hours')
+    const minutes = t.querySelector('#minutes')
+    const seconds = t.querySelector('#seconds')
+    const interval = setInterval(updateTimer, 1000)
+
+
+    function updateTimer() {
+        const t = getRemainingTime(endTime)
+
+        if (t.t <= 0) {
+            clearInterval(interval)
+            return
         }
 
+        days.innerHTML = setNulls(t.days)
+        hours.innerHTML = setNulls(t.hours)
+        minutes.innerHTML = setNulls(t.minutes)
+        seconds.innerHTML = setNulls(t.seconds)
+
+
+        function setNulls(num) {
+            return num < 10 ? `0${num}` : num
+        }
     }
-})
+}
 
-
-
-// Sale
-const minutes = document.querySelector('#minutes')
-const seconds = document.querySelector('#seconds')
-
-setInterval(() => {
-    seconds.innerHTML--
-
-    if (seconds.innerHTML <= -1) {
-        seconds.innerHTML = 59
-        minutes.innerHTML--
-    }
-
-    if (seconds.innerHTML < 10) {
-        seconds.innerHTML = `0${seconds.innerHTML}`
-    }
-
-}, 1000)
+setTimer(deadline, '.timer')
+  

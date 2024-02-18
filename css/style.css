@@ -737,3 +737,13 @@ a {
 		opacity: 1;
 	}
 }
+
+
+.video {
+	width: 100%;
+	opacity: 0;
+}
+
+.active {
+	opacity: 1 !important;
+}
