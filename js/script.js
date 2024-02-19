@@ -114,21 +114,55 @@ prev_btn.onclick = () => {
 
 
 
+// GENDER
+let user = {
+    gender: 'woman'
+}
+
+const gender_btns = document.querySelectorAll('#gender div')
+const inputs = document.querySelectorAll('.calculating__choose_medium input')
+const cardio_btns = document.querySelectorAll('.calculating__choose_big div')
+const result_view = document.querySelectorAll('#result_view')
 
 
 
+gender_btns.forEach(btn => {
+    btn.onclick = () => {
+        gender_btns.forEach(el => el.classList.remove('calculating__choose-item_active'))
+        btn.classList.add('calculating__choose-item_active')
 
-// let user = {
-//     gender: 'woman'
-// }
+        user.gender = btn.getAttribute('data-g')
+    }
+})
 
-// const gender_btns = document.querySelectorAll('#gender div')
+inputs.forEach(inp => {
+    inp.oninput = () => {
+        user[inp.id] = inp.value
+    }
+})
+
+cardio_btns.forEach(btn => {
+    btn.onclick = () => {
+        cardio_btns.forEach(el => el.classList.remove('calculating__choose-item_active'))
+        btn.classList.add('calculating__choose-item_active')
+
+        let cardio = btn.getAttribute('data-cardio')
+
+        if (user.gender === 'woman') {
+            let result = 655.1 + (9.563 * user.weight) + (1.85 * user.height) - (4.676 * user.age);
+            result_view.innerHTML = Math.round(result * cardio)
+        } else {
+            let result = 66.5 + (13.75 * user.weight) + (5.003 * user.height) - (6.775 * user.age);
+            result_view.innerHTML = Math.round(result * cardio)
+        }
+    }
+})
 
 
 
 
 // TIMER
-const deadline = "2024-02-19 01:00"
+const deadline = "2024-04-12 00:00"
 
 function getRemainingTime(endTime) {
     const t = Date.parse(endTime) - Date.parse(new Date())
@@ -158,7 +192,7 @@ function setTimer(endTime, selector) {
     function updateTimer() {
         const t = getRemainingTime(endTime)
 
-        if (t.t <= 0) {
+        if (t.t < 0) {
             clearInterval(interval)
             return
         }
