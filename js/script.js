@@ -122,7 +122,7 @@ let user = {
 const gender_btns = document.querySelectorAll('#gender div')
 const inputs = document.querySelectorAll('.calculating__choose_medium input')
 const cardio_btns = document.querySelectorAll('.calculating__choose_big div')
-const result_view = document.querySelectorAll('#result_view')
+const result_view = document.querySelector('#result_view')
 
 
 
@@ -135,11 +135,13 @@ gender_btns.forEach(btn => {
     }
 })
 
+
 inputs.forEach(inp => {
     inp.oninput = () => {
         user[inp.id] = inp.value
     }
 })
+
 
 cardio_btns.forEach(btn => {
     btn.onclick = () => {
@@ -157,6 +159,7 @@ cardio_btns.forEach(btn => {
         }
     }
 })
+
 
 
 
